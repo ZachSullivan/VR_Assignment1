@@ -10,7 +10,9 @@ public class PlayerController : MonoBehaviour {
     public int mouseYSens = 5;
 
     public float camYViewRange = 60.0f;
-    
+    public float smooth = 7;
+
+    bool isCrouching = false;
 
     float camYRot = 0;
     float adjustedCamYRot = 0;
@@ -48,6 +50,7 @@ public class PlayerController : MonoBehaviour {
 
             if (Input.GetButton("Jump"))
                 moveDirection.y = jumpSpeed;
+
         }
         moveDirection.y -= gravity * Time.deltaTime;
         playerController.Move(moveDirection * Time.deltaTime);
