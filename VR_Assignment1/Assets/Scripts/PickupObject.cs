@@ -38,7 +38,7 @@ public class PickupObject : MonoBehaviour {
 
         obj.GetComponent<Rigidbody>().isKinematic = true;
         obj.transform.position = Vector3.Lerp(obj.transform.position, mainCam.transform.position + mainCam.transform.forward * dis, Time.deltaTime * smooth);
-
+        obj.transform.rotation = Quaternion.Lerp(obj.transform.rotation, Quaternion.EulerAngles(0,0,0), Time.deltaTime * smooth);
     }
 
     void CheckDrop() {
