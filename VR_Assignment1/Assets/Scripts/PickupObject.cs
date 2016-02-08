@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PickupObject : MonoBehaviour {
+public class PickupObject : MonoBehaviour
+{
 
     public Camera mainCam;
 
     GameObject carriedObject;
 
-    bool isCarrying = false;
+    public bool isCarrying = false;
 
     //Distance a held object should be from the camera
     public float dis = 3;
@@ -16,47 +17,63 @@ public class PickupObject : MonoBehaviour {
     public float smooth = 3;
 
     // Use this for initialization
-    void Start () {
-	    mainCam = GetComponentInChildren<Camera>();
+    void Start()
+    {
+        mainCam = GetComponentInChildren<Camera>();
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
+
+        if (Input.GetKey(KeyCode.Escape))
+            Screen.lockCursor = false;
+        else
+            Screen.lockCursor = true;
 
         //Check if the user is currently holding an object
-        if (isCarrying){
+        if (isCarrying)
+        {
             CarryObject(carriedObject);
             CheckDrop();
         }
-        else {
+        else
+        {
             ObjectPickup();
         }
 
-	}
+    }
 
-    void CarryObject(GameObject obj) {
+    void CarryObject(GameObject obj)
+    {
 
         obj.GetComponent<Rigidbody>().isKinematic = true;
         obj.transform.position = Vector3.Lerp(obj.transform.position, mainCam.transform.position + mainCam.transform.forward * dis, Time.deltaTime * smooth);
-        obj.transform.rotation = Quaternion.Lerp(obj.transform.rotation, Quaternion.EulerAngles(0,0,0), Time.deltaTime * smooth);
+        obj.transform.rotation = Quaternion.Lerp(obj.transform.rotation, Quaternion.EulerAngles(0, 0, 0), Time.deltaTime * smooth);
+        //obj.transform.LookAt(this.gameObject.transform);
     }
 
-    void CheckDrop() {
-        if (Input.GetKeyDown(KeyCode.E)) {
+    void CheckDrop()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
             DropObject();
         }
     }
 
-    void DropObject() {
+    void DropObject()
+    {
         isCarrying = false;
         carriedObject.gameObject.GetComponent<Rigidbody>().isKinematic = false;
         carriedObject = null;
     }
 
-    void ObjectPickup() {
+    void ObjectPickup()
+    {
 
         //User must press E key to interact with object
-        if (Input.GetKeyDown(KeyCode.E)) {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
 
             //Obtain the center point of the screen
             int screenX = Screen.width / 2;
@@ -67,12 +84,14 @@ public class PickupObject : MonoBehaviour {
             RaycastHit hit;
 
             //Check if the ray hits an object
-            if (Physics.Raycast(ray, out hit)) {
+            if (Physics.Raycast(ray, out hit))
+            {
                 //Ensure the object that is hit is interactable object (has interactable script attached)
                 Interactable obj = hit.collider.GetComponent<Interactable>();
 
                 //If the object is interactable, assign the current carried object to this
-                if (obj != null) {
+                if (obj != null)
+                {
                     isCarrying = true;
                     carriedObject = obj.gameObject;
                 }
